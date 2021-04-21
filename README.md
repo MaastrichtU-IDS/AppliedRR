@@ -43,7 +43,7 @@ The curriculum for these students will be:
 |[Lecture 2](inputs/lectures/lecture2.pdf) | 13 May 2021 | Descriptive Statistics |
 |[Lecture 3](inputs/lectures/lecture3.pdf) | 08 June 2021 | Inferential Statistics I |
 |[Lecture 4](inputs/lectures/lecture4.pdf) | 10 June 2021 | Inferential Statistics II |
-|[Lecture 5](inputs/lectures/lecture5.pdf) | 12 June 2021 | Inferential Statistics II |
+|[Lecture 5](inputs/lectures/lecture5.pdf) | 12 June 2021 | Inferential Statistics III |
 
 ## Assignments
 
