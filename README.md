@@ -53,7 +53,7 @@ The curriculum for these students will be:
 | [Exploratory Data Analysis](inputs/tutorials/Workshop2.docx) | 02:00 | What are the steps for Exploratory Data Analysis? |
 | [Inferential Statistics I](inputs/tutorials/Workshop3.docx) | 03:30 | How to conduct and interpret t-test in R? |
 | [Inferential Statistics II](inputs/tutorials/Workshop4.docx) | 05:00 | How to conduct and interpret ANOVA & Chi square test?  |
-| [Inferential Statistics II](inputs/tutorials/Workshop5.docx) | 06:30| How to conduct and interpret linear & logistic regression?  |
+| [Inferential Statistics III](inputs/tutorials/Workshop5.docx) | 06:30| How to conduct and interpret linear & logistic regression?  |
 
 
 ## Reference cards
