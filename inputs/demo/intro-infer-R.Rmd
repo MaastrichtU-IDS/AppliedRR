@@ -35,6 +35,9 @@ By the end of this demo, you should be able to:
 
 ## Quick started with hyptohesis testing using [R Markdown](https://rmarkdown.rstudio.com/)
 
+![Artwork by @allison_horst](https://cfss.uchicago.edu/media/allison_horst_art/rmarkdown_rockstar_hu2e508a81a7bfad3089552f8e7186e525_4660528_1200x1200_fit_lanczos_2.png)
+
+
 R Markdown documents are fully reproducible. Use a productive notebook interface to weave together narrative text and code to produce elegantly formatted output.
 
 
