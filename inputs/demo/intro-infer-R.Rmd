@@ -9,50 +9,61 @@ description: Working your way through a basic analysis, in a reproducible manner
 ---
 
 ```{r setup, include=FALSE}
-knitr ::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
-
-![R Workshops from the Institute of Data Science in UM](https://maastrichtu-ids.github.io/AppliedRR/pics/logoIDS.png)
+![](https://maastrichtu-ids.github.io/AppliedRR/pics/logoIDS.png)
 
 
 # WELCOME
+
 Welcome to the **workshop number 3: Introduction to inferential stats with R.**
 
 **Learning outcomes:**
-By the end of this assignment, you should be able to:
+
+By the end of this demo, you should be able to:
+
+* Open and create a R Markdown.
 
 * Formulate different hypothesis testing
 
-* Interpret hypothesis testing model outputs
-
-* Calculate correlation and covariance
+* Interpret hypothesis testing for comparing means model outputs
 
 * Interpret pearson correlation and scatter plots
-
-* Loop functions in R (bonus exercise)
-
 
 
 ## Quick started with hyptohesis testing using [R Markdown](https://rmarkdown.rstudio.com/)
 
 R Markdown documents are fully reproducible. Use a productive notebook interface to weave together narrative text and code to produce elegantly formatted output.
 
+
 If you want to get more familiar with the hand procedure of hypothesis testing, you have a look in the following tutorials:
 
-- [http://www.r-tutor.com/elementary-statistics/hypothesis-testing](http://www.r-tutor.com/elementary-statistics/hypothesis-testing)
+- [Inferential statistics](http://www.r-tutor.com/elementary-statistics/hypothesis-testing)
 
 - [Hypothesis Testing by Hand: A Single Sample tTest]([https://www.youtube.com/watch?v=yvHQEJnYZBY])
 
 
 ## Using the Student's T-test
+
 R can handle the various versions of T-test using the `t.test()` command. This function can be used to deal with one-sample tests as well as two-sample (un-)paired tests.
 
 ### DEMO 1: (Unparied) Independent samples t-test
- 
-The independent sample t-test compares the mean of one distinct group to the mean of another group.  An example research question for an independent sample t-test would be, “Is there any (statistical) difference in the mean orange juice poured in a glass of 33cl between Maastricht and Amsterdam coffee lovers?”
+
+
+**Research question:**Is there any (statistical) difference in the mean orange juice poured in a glass of 33cl between Maastricht and Amsterdam coffee lovers?
+
+![](https://club.atlascoffeeclub.com/wp-content/uploads/2019/05/nathan-dumlao-264380-unsplash.jpg)
+
+
+The independent sample t-test compares the mean of one distinct group to the mean of another group.  
+
+---
+
+#### YOUR TURN
+
+Complete the steps to perform a t-test comparing means. In a markdown, add R script
 
 **Step 1: Formulate the hypothesis**
 
@@ -68,9 +79,12 @@ orange_maastricht <- c(28,31,28,37,30,
 orange_amsterdam <-  c(24,31,25,37,30,
             33,23,32,24,30)
 
+print(orange_amsterdam)
+print(orange_maastricht)
+
 ```
 **Step 4: Conduct t-test for comparing means**
-```{r}
+```{r echo=FALSE}
 # Conduct independent t-test
 t.test(x = orange_maastricht,   # sample values Maastricht
        y = orange_amsterdam,    # sample values Amsterdam
@@ -78,13 +92,16 @@ t.test(x = orange_maastricht,   # sample values Maastricht
        var.equal = TRUE) # we assume variance are equal thus, we run Student t.test
 ```
 
-
 **Step 5: Conclusion & Model Output Interpretation**
 
-From the model output, we can see that the mean orange volume in cl for the sample is 29.9 cl. The two-sided 95% confiance interval tells you that the mean orange volume is likely to be between 27.11 and 32.6 cl. The p-value of 0.033 tells you if the mean volume of orange juice were 33 cl, the probability to select a sample with a mean volume not equal to 33 cl would be approximately 3% (p-value = 0.033). Since the p-value is less than the significance level (0.05), we can reject the true mean is equal to 33 cl. This means that there is not statistical evidence that orange juice are being equal to 33 cl.
 
 
 ### DEMO 2: Gapminder dataset
+
+**Research question:** Is there any (statistical) difference in the mean Life Expectancy between South Africa and Ireland?
+
+![](https://pbs.twimg.com/profile_images/523819488236433408/gAMQQRCu_400x400.png)
+---
 
 ```{r}
 # Create a plot with Data Gapminder
@@ -107,49 +124,69 @@ t.test(data = mydat, lifeExp ~ country)
 ```
 
 
-## Scatter plot, correlation and covariance
+## Scatter plot and pearson correlation
+
+![Artwork by @allison_horst](https://cfss.uchicago.edu/media/allison_horst_art/presenting_monster_hu19027c6bf39be6f35de5f2a07de7eee0_1253011_1200x1200_fit_lanczos_2.png)
 
 In statistics, you deal with a lot of data. The hard part is finding patterns that fit the data. To look for patterns, there are several statistical tools that help identify these patterns. But before you use any of these tools, you should look for basic patterns. As you learned, you can identify basic patterns using a scatter plot and correlation.
+
+Import Gapminder dataset:
+```{r}
+library(gapminder)
+data("gapminder")
+
+```
+
 
 
 Let's create a simple scatter plot:
 
 ```{r}
-plot(mydat$lifeExp,mydat$gdpPercap)
-```
-According to this figure, we might conclude that there is a weak association between age and length variables. Also, we cannot clearly define the direction of this association. Relying on the interpretation of a scatterplot is too subjective. More precise evidence is needed, and this evidence is obtained by computing a coefficient that measures the strength of the relationship under investigation.
-
-
-
-
-```{r}
-plot(mydat$lifeExp,mydat$gdpPercap)
-abline(lm(gdpPercap~lifeExp,mydat))
-
+plot(gapminder$lifeExp,gapminder$gdpPercap)
 ```
 
 You could see from the scatter plot that including this line, add more information about the slope/direction of the relationship.
 
+```{r}
+plot(gapminder$lifeExp,gapminder$gdpPercap)
+abline(lm(gdpPercap~lifeExp,gapminder), col ="blue")
+
+```
+
+According to this figure, we might conclude that there is a weak association between GDP and LifeExp variables. Also, we cannot clearly define the direction of this association. Relying on the interpretation of a scatterplot is too subjective. More precise evidence is needed, and this evidence is obtained by computing a coefficient that measures the strength of the relationship under investigation.
+
 
 ```{r}
 library(ggplot2)
-ggplot(mydat,aes(x = gdpPercap, y = lifeExp)) + 
-  geom_point() + facet_wrap(~country) + geom_smooth(method = 'lm')
+ggplot(gapminder,aes(x = lifeExp, y = gdpPercap)) + 
+  geom_point() + facet_wrap(~continent) + geom_smooth(method = 'lm')
 ```
 
 ```{r}
 ggplot(
   data = gapminder,
-  mapping = aes(x = gdpPercap, y = lifeExp)
+  mapping = aes(x = lifeExp, y = gdpPercap)
 ) +
   geom_point(alpha = .1) +
   geom_smooth(se = FALSE) +
   labs(
-    title = "Relationship between gdpPercap mass and LifeExp Worldwide",
-    subtitle = "Gapminder dataset",
+    title = "Relationship between GDP per capita and Life Expectancy",
+    subtitle = "Gapminder dataset - Worldwide",
     x = "GDP (euro)",
     y = "Life Expectancy (years)"
   ) +
   theme_minimal()
 ```
 
+Because both are both continuous variables, will use Pearson’s product-moment correlation to quantify the strength of the relationship between these two variables. There are a few ways to do this in R, but we will only consider one method here.
+
+```{r}
+
+# correlation between both variables
+cor(gapminder$lifeExp,gapminder$gdpPercap)
+# Calculating Pearson's product-moment correlation
+ cor.test(gapminder$lifeExp,gapminder$gdpPercap, method = "pearson", conf.level = 0.95)
+```
+
+---
+This work is licensed under the [CC BY-NC 4.0 Creative Commons License](http://creativecommons.org/licenses/by-nc/4.0/).
