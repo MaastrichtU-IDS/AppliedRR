@@ -2,11 +2,7 @@
 
 <img align="center" src="./pics/logoIDS.png">
 
-
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
-[![Binder](https://mybinder.org/badge.svg)](..)
-[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](..)
-
 
 
 This repository contains a collection of tutorials, lectures and hands-on material, developed at the University of Maastricht (Institute of Data Science) for [Applied Research course](https://www.maastrichtuniversity.nl/meta/393554/applied-researcher-ii) that use R software.
@@ -55,6 +51,8 @@ The curriculum for these students will be:
 | [Inferential Statistics II](inputs/tutorials/Workshop4.docx) | 05:00 | How to conduct and interpret ANOVA & Chi square test?  |
 | [Inferential Statistics III](inputs/tutorials/Workshop5.docx) | 06:30| How to conduct and interpret linear & logistic regression?  |
 
+## Demo
++ [Introduction to R Markdown](inputs/demo/intro-infer-R.html)
 
 ## Reference cards
 

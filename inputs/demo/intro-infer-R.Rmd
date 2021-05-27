@@ -1,0 +1,155 @@
+---
+title: 'Applied Research: Analyse, Share and Reproduce Statistics with R Markdown'
+author:
+- name: Carlos Utrilla Guerrero
+date: "6/08/2021"
+output:
+  html_document: default
+description: Working your way through a basic analysis, in a reproducible manner.
+---
+
+```{r setup, include=FALSE}
+knitr ::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+![R Workshops from the Institute of Data Science in UM](https://maastrichtu-ids.github.io/AppliedRR/pics/logoIDS.png)
+
+
+# WELCOME
+Welcome to the **workshop number 3: Introduction to inferential stats with R.**
+
+**Learning outcomes:**
+By the end of this assignment, you should be able to:
+
+* Formulate different hypothesis testing
+
+* Interpret hypothesis testing model outputs
+
+* Calculate correlation and covariance
+
+* Interpret pearson correlation and scatter plots
+
+* Loop functions in R (bonus exercise)
+
+
+
+## Quick started with hyptohesis testing using [R Markdown](https://rmarkdown.rstudio.com/)
+
+R Markdown documents are fully reproducible. Use a productive notebook interface to weave together narrative text and code to produce elegantly formatted output.
+
+If you want to get more familiar with the hand procedure of hypothesis testing, you have a look in the following tutorials:
+
+- [http://www.r-tutor.com/elementary-statistics/hypothesis-testing](http://www.r-tutor.com/elementary-statistics/hypothesis-testing)
+
+- [Hypothesis Testing by Hand: A Single Sample tTest]([https://www.youtube.com/watch?v=yvHQEJnYZBY])
+
+
+## Using the Student's T-test
+R can handle the various versions of T-test using the `t.test()` command. This function can be used to deal with one-sample tests as well as two-sample (un-)paired tests.
+
+### DEMO 1: (Unparied) Independent samples t-test
+ 
+The independent sample t-test compares the mean of one distinct group to the mean of another group.  An example research question for an independent sample t-test would be, “Is there any (statistical) difference in the mean orange juice poured in a glass of 33cl between Maastricht and Amsterdam coffee lovers?”
+
+**Step 1: Formulate the hypothesis**
+
+**Step 2: State level significance**
+
+**Step 3: Collect data from different cities**
+
+```{r}
+# Define orange sample
+orange_maastricht <- c(28,31,28,37,30,
+            33,25,33,24,30)
+
+orange_amsterdam <-  c(24,31,25,37,30,
+            33,23,32,24,30)
+
+```
+**Step 4: Conduct t-test for comparing means**
+```{r}
+# Conduct independent t-test
+t.test(x = orange_maastricht,   # sample values Maastricht
+       y = orange_amsterdam,    # sample values Amsterdam
+       paired = FALSE, # different and independent observations from samples
+       var.equal = TRUE) # we assume variance are equal thus, we run Student t.test
+```
+
+
+**Step 5: Conclusion & Model Output Interpretation**
+
+From the model output, we can see that the mean orange volume in cl for the sample is 29.9 cl. The two-sided 95% confiance interval tells you that the mean orange volume is likely to be between 27.11 and 32.6 cl. The p-value of 0.033 tells you if the mean volume of orange juice were 33 cl, the probability to select a sample with a mean volume not equal to 33 cl would be approximately 3% (p-value = 0.033). Since the p-value is less than the significance level (0.05), we can reject the true mean is equal to 33 cl. This means that there is not statistical evidence that orange juice are being equal to 33 cl.
+
+
+### DEMO 2: Gapminder dataset
+
+```{r}
+# Create a plot with Data Gapminder
+library(gapminder)
+library(dplyr)
+data("gapminder")
+mydat <- filter(gapminder, country == 'South Africa' | country == 'Ireland')
+
+summarize(filter(mydat, country == 'South Africa'),
+          Avg_Life_SouthAfrica = mean(lifeExp, na.rm = TRUE))
+
+```
+```{r}
+summarize(filter(mydat, country == 'Ireland'),
+          Avg_Life_Ireland = mean(lifeExp, na.rm = TRUE))
+```
+
+```{r}
+t.test(data = mydat, lifeExp ~ country)
+```
+
+
+## Scatter plot, correlation and covariance
+
+In statistics, you deal with a lot of data. The hard part is finding patterns that fit the data. To look for patterns, there are several statistical tools that help identify these patterns. But before you use any of these tools, you should look for basic patterns. As you learned, you can identify basic patterns using a scatter plot and correlation.
+
+
+Let's create a simple scatter plot:
+
+```{r}
+plot(mydat$lifeExp,mydat$gdpPercap)
+```
+According to this figure, we might conclude that there is a weak association between age and length variables. Also, we cannot clearly define the direction of this association. Relying on the interpretation of a scatterplot is too subjective. More precise evidence is needed, and this evidence is obtained by computing a coefficient that measures the strength of the relationship under investigation.
+
+
+
+
+```{r}
+plot(mydat$lifeExp,mydat$gdpPercap)
+abline(lm(gdpPercap~lifeExp,mydat))
+
+```
+
+You could see from the scatter plot that including this line, add more information about the slope/direction of the relationship.
+
+
+```{r}
+library(ggplot2)
+ggplot(mydat,aes(x = gdpPercap, y = lifeExp)) + 
+  geom_point() + facet_wrap(~country) + geom_smooth(method = 'lm')
+```
+
+```{r}
+ggplot(
+  data = gapminder,
+  mapping = aes(x = gdpPercap, y = lifeExp)
+) +
+  geom_point(alpha = .1) +
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "Relationship between gdpPercap mass and LifeExp Worldwide",
+    subtitle = "Gapminder dataset",
+    x = "GDP (euro)",
+    y = "Life Expectancy (years)"
+  ) +
+  theme_minimal()
+```
+
