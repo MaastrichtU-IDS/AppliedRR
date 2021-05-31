@@ -103,7 +103,7 @@ t.test(x = orange_maastricht,   # sample values Maastricht
 
 **Research question:** Is there any (statistical) difference in the mean Life Expectancy between South Africa and Ireland?
 
-![](https://pbs.twimg.com/profile_images/523819488236433408/gAMQQRCu_400x400.png)
+![](https://pics.me.me/thumb_is-your-p-value-greater-than-alpha-because-id-fail-4042435.png)
 ---
 
 ```{r}
@@ -156,7 +156,7 @@ abline(lm(gdpPercap~lifeExp,gapminder), col ="blue")
 
 ```
 
-According to this figure, we might conclude that there is a weak association between GDP and LifeExp variables. Also, we cannot clearly define the direction of this association. Relying on the interpretation of a scatterplot is too subjective. More precise evidence is needed, and this evidence is obtained by computing a coefficient that measures the strength of the relationship under investigation.
+According to this figure, we might conclude that there is a weak association between GDP and LifeExp variables. Also, we cannot clearly define the direction of this association. Relying on the interpretation of a scatterplot is too subjective. Indeed,more precise evidence is needed, and this evidence is obtained by computing a coefficient that measures the strength of the relationship under investigation.
 
 
 ```{r}
