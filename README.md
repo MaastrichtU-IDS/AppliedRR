@@ -52,7 +52,9 @@ The curriculum for these students will be:
 | [Inferential Statistics III](inputs/tutorials/Workshop5.docx) | 06:30| How to conduct and interpret linear & logistic regression?  |
 
 ## Demo
-+ [Introduction to R Markdown](inputs/demo/intro-infer-R.html)
++ [Intro to R Markdown, indepedent t-test and correlations](inputs/demo/demo-lecture3.html)
++ [Paired t-test and ANOVA](inputs/demo/demo-lecture4.html)
++ [Linear regression and logit](inputs/demo/demo-lecture5.html)
 
 ## Reference cards
 
