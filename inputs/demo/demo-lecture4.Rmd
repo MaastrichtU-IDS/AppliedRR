@@ -1,0 +1,232 @@
+---
+title: 'Applied Research: Paired test, ANOVA and Chi-squared for independence'
+author:
+- name: Carlos Utrilla Guerrero
+date: "6/08/2021"
+output:
+  html_document: default
+description: Working your way through a basic analysis, in a reproducible manner.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+![](https://maastrichtu-ids.github.io/AppliedRR/pics/logoIDS.png)
+
+# WELCOME
+
+Welcome to the workshop number 4: More about inferential stats with R.
+
+**Learning outcomes:**
+By the end of this assignment(s), you should be able to:
+
+•	Know-how to perform t.test for paired data
+
+•	Know-how to conduct and use One-way Anova test
+
+•	Know-how to use chi-square for independent
+
+## Paired t-test
+
+![](https://miro.medium.com/max/643/1*c3I4Px2ezjbWu3SiInRCKA.jpeg)
+
+As you already know, t-Tests are a great way of identifying if two group means are statistically different. This can be done by comparing a sample to the population (one-sample) or comparing two different samples (two-sample).T-tests are further broken down into two categories: unpaired t-tests and paired t-tests. This tutorial will focus on the latter.
+
+
+### Import Dataset:
+
+
+To illustrate the paired t-test, we will use the Student's Sleep Data.
+
+*Description*
+Data which show the effect of two soporific drugs (increase in hours of sleep compared to control) on 10 patients.
+
+*Format*
+A data frame with 20 observations on 3 variables.
+
+[, 1]	extra	numeric	increase in hours of sleep
+[, 2]	group	factor	drug given
+[, 3]	ID	factor	patient ID
+
+Use the build-in `sleep` function to directly import into R the data set. Please, run the following R command:
+
+```{r}
+# import R data set 'sleep'
+sleep <- sleep
+```
+
+**Visualisation**
+
+```{r}
+boxplot(sleep$extra ~ sleep$group,
+        col = c("red", "blue"),
+        ylab = 'extra sleep',
+        xlab = 'groups',
+        main = 'formula = extra ~ groups')
+
+```
+
+### DEMO:
+
+**Q1. How would you create the same boxplot using ggplot library? How would you fix this error?**
+
+_Hint_: Check the official documentation for ggplot2: http://www.sthda.com/english/wiki/ggplot2-box-plot-quick-start-guide-r-software-and-data-visualization
+
+```{r eval=FALSE, include=FALSE}
+library(ggplot2)
+ggplot(sleep, aes(x=groups, y=extra, color=groups)) +
+  geom_boxplot()
+```
+
+**Q2. Research question: Is there a statistically significant effect of the drug on sleep hours?**
+
+```{r echo=FALSE}
+t.test(x = sleep$extra[sleep$group == 1],
+       y = sleep$extra[sleep$group ==2],
+       paired = TRUE)
+```
+
+**Q3. What if we want to test the hypothesis that mean of group A is less than group B? Which parameter do you need to declare from the `t.test(0)` method?**
+
+```{r echo=FALSE}
+t.test(x = sleep$extra[sleep$group == 1],
+       y = sleep$extra[sleep$group ==2],
+       paired = TRUE)
+```
+
+## Analysis of the Variance (ANOVA)
+
+
+### What is one-way ANOVA test?
+
+The one-way analysis of variance (ANOVA), also known as one-factor ANOVA, is a statistical technique, commonly used to study differences between two or more group means. In one-way ANOVA, the data is organized into several groups base on one single grouping variable (also called factor variable). This section describes the basic principle of the one-way ANOVA test and provides practical anova test examples in R software.
+
+### ANOVA test hypotheses:
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nicCTmNutpFgW7ONzNbM4VMeXZZb1dfq54LZNHmwT60Kv04gNWj18nWuCK_O4jR4SOg&usqp=CAU)
+
+
+Null hypothesis: the means of the different groups are the same.
+Alternative hypothesis: At least one sample mean is not equal to the others.
+
+*Note that, if you have only two groups, you can use t-test. In this case the F-test and the t-test are equivalent*.
+
+#### General steps to conduct an ANOVA
+Here are the 2 steps you should follow to conduct a standard ANOVA in R:
+
+1. Create an ANOVA object using the `aov()` function. In the `aov()` function, specify the independent and dependent variable(s) with a formula with the format `y ~ x1`  where `y` is the dependent variable, and x1, are one (more more) factor independent variables.
+
+```{r eval=FALSE, include=FALSE}
+# Step 1: Create an object (you can call it mod.aov)
+mod.aov <- aov(formula = y ~ x1,
+               data = data)
+```
+
+
+2. Create a summary ANOVA table by applying the `summary()` function to the ANOVA object you created in Step 1.
+
+```{r, eval=F, echo=T}
+# Step 2: Look at a summary of the aov object
+summary(mod.aov)
+```
+
+### Import dataset
+
+Here, we’ll use the built-in R data set named PlantGrowth. It contains the weight of plants obtained under a control and two different treatment conditions.
+
+```{r}
+plants <- PlantGrowth # import dataset with R built function
+# show the levels == categpries
+levels(plants$group)
+
+```
+
+### Check your data
+To have an idea of what the data look like, we use the the function head(). The head() function randomly picks a few of the observations in the data frame to print out:
+
+```{r}
+head(plants)
+```
+
+Note: In R terminology, the column “group” is called factor and the different categories (“ctr”, “trt1”, “trt2”) are named factor levels. The levels are ordered alphabetically.
+
+```{r}
+# Show the levels
+
+levels(plants$group)
+```
+
+
+### DEMO
+
+**Q1: Create summary statistics by group. Why this error appears and how to solve it?**
+
+```{r eval=FALSE, include=FALSE}
+summarise(group_by(my_data, group),
+          count = n(),
+          mean = mean(weight, na.rm = TRUE),
+              sd = sd(weight, na.rm = TRUE)
+  )
+
+```
+
+
+**Visualise the data**
+
+```{r eval=FALSE, include=FALSE}
+boxplot(my_data$weight ~ my_data$group,
+        col = c("red", "blue","yellow"),
+        ylab = 'weight',
+        xlab = 'groups',
+        main = 'formula = weight ~ groups')
+
+```
+
+
+**Compute one-way ANOVA test**
+
+*Question: We want to know if there is any significant difference between the average weights of plants in the 3 experimental conditions*
+
+_Hint_: check official documentation: https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov
+
+```{r eval=FALSE, include=FALSE}
+# Step 1: aov object with weight as DV and groups as IV
+plant.aov <- aov(formula = weight ~ group,
+                   data = my_data)
+```
+
+
+Now, to see a full ANOVA summary table of the ANOVA object, apply the summary() to the ANOVA object from Step 1.
+
+```{r eval=FALSE, include=FALSE}
+# Step 2: Look at the summary of the anova object
+summary(plant.aov)
+```
+
+
+## Chi-square: chsq.test()
+
+![](https://pbs.twimg.com/media/Ch8nhtIUgAA-hxi.jpg)
+
+
+```{r}
+# Create contingency table
+ResponsableDS <-  as.table(rbind(c(100, 150, 20),
+                                 c(20, 30, 180)))
+dimnames(ResponsableDS) <- list(gender = c("Boys",
+                                           "Girls"),
+                                course= c("Statistics", "Computer Science","Ethics & Responsability"))
+
+
+ResponsableDS # call the contingency table
+
+```
+```{r}
+
+# use chisq() function
+(Xsq <- chisq.test(ResponsableDS))  # Prints test summary
+Xsq$observed
+Xsq$expected
+```
+
