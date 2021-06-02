@@ -1,0 +1,454 @@
+---
+title: 'Applied Research: Linear and logistic regression'
+author:
+- name: Carlos Utrilla Guerrero
+date: "6/08/2021"
+output:
+  html_document: default
+description: Working your way through a basic analysis, in a reproducible manner.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+![](https://maastrichtu-ids.github.io/AppliedRR/pics/logoIDS.png)
+
+
+# WELCOME
+
+
+In workshop #5 you’ll practice constructing and understanding regression models.
+
+
+* Create simple and multiple linear regression models with `lm()`
+
+* Explore the outputs of your models, including coefficients, confidence intervals, and p-values.
+
+* Explore the residuals and fitted values of a linear model.
+
+* Use your model to make predictions for new data,
+
+---
+
+## IMPORT DATASET
+
+![](https://johnmuschelli.com/neuroc_talk/figures/grandma_meme.jpg)
+
+The baseball.csv file contains *Major League Baseball Data* from the 1986 and 1987 seasons. The data originally come from the `ISLR` package.
+
++ [download](https://docs.google.com/spreadsheets/d/1644rcEM0Jk8qN1l4_2aewfgAuNQ2jg0cJNgSX--ebXM/edit#gid=0)
+
+Using the following command in R, load the baseball.excel data into R and store it as a new object called hitters.
+
+```{r}
+library(readxl) # import library
+baseball <- read_excel("Baseball.xlsx") # import the baseball.xlsx file
+```
+
+_*Note that this command assumes that you have the `readxl` package already installed. If you haven’t done this in previous meetings but imported the file differently, then you first have to run the command `install.packages(“readxl”)`._
+
+---
+## DATA PREPARATION
+
+First, you want to get to know the data set and see whether importing the dataset was successful and worked out correctly. To do this, first take a look at the first 6 rows of the dataset(s) by printing it/them to the console. 
+
+**Which command allows you to do this? The output should look like the table below:**
+
+```{r echo=FALSE}
+head(baseball,6)
+```
+
+Next, you take a look at the *structure* of the data in order to see the number of observations the dataset `baseball` has, as well as the number and type of variables.
+
+**Which code can you use? The output should look like...or give you exactly this information!**
+
+```{r echo=FALSE}
+str(baseball)
+```
+
+
+Now, you see that this data contains 50 observations and 20 variables. Also, we can clearly see that most of them are numerical and few of them are `characters` _(characters = text/string)_. Furthermore, none of the numerical variables are categorical ones, while all of the character variables are categorical. However, since the categorical variables are considered characters, they can’t be effectively used in further analysis. Therefore, we need to convert them into factors. 
+
+_*Note, due to the fact that we import the file from excel into R, R does not directly recognize categorical variables as factor and therefore we need to convert them ourselves._
+
+### Exercise 1: Can you please convert all three categorical variables into a factor? Remember from workshop 2 the code? 
+
+
+```{r}
+# convert the variable "League" into factor
+baseball$League <- factor(baseball$League)
+# convert the variable "Division" into factor
+baseball$Division <- factor(baseball$Division)
+# convert the variable "NewLeague" into factor
+baseball$NewLeague <- factor(baseball$Division)
+```
+
+Does the code class tell you that all the 3 categorical variables have been changed into a factor? If yes, then perfect! Another way to check it is having a look again the structure of our baseball dataset. The difference to `class()` is that the next command also immediately tells you how many levels the individual factor variables have.
+
+```{r}
+str(baseball)
+```
+
+
+Next thing to do is to check for **missing values**. You already know that you can use the command `is.na()` in R in order to see if there are missing values. If you run it, you will see that there are any NA values in our dataset; that is perfect! Nonetheless, a good point of `summary()` is that also will give you a count of NA values.
+
+
+---
+
+## DATA EXPLORATION
+
+![](https://cdn-images-1.medium.com/fit/t/1600/480/1*uCVjc-xE2uzh2hhtKURh2w.jpeg)
+
+Great. It seems like we are ready to run some basic summary statistics of our dataset now, in order to get a first impression of the data distribution. 
+
+**Which code can you use? The output should look like...or give you exactly this information!**
+
+```{r echo=FALSE}
+summary(baseball)
+```
+
+At this point, we are very interested on exploring the Baseball dataset. We are wondering if **there is a relationship between the number of `Hits` a player had and his `Salary.`** Lets create a scatterplot for this. Try this command in your R console
+
+```{r}
+library(ggplot2) # import ggplot2 library for visualisation
+ggplot(baseball, aes(x = Hits, y = Salary)) +
+  geom_point(col = "pink") +
+  labs(title = "Is there any relationship between baseball player Hits vs Salary",
+       subtitle = "Plotting your data is the first step to figuring out",
+       caption = "R course Venlo Course")
+```
+
+
+_*Note again, that library() only works if you have already installed the related package previously, in this case `install.packages(“ggplot2”)`._
+
+The y-axis is the amount of salary **(the dependent variable is always on the y-axis)** and the x-axis is the total Hits. Each pink dot represents one player the baseball dataset. Glancing at this data, you probably notice that salary are higher for players that hit a lot. That’s interesting to know, but by how much is the salary higher?
+How can we answer with some degree of certainty how much a player typically earns when he hits a certain amount of balls? We can do this by drawing a line through the chart above, one that runs roughly through the middle of all the data points. We do this as follows:
+
+
+```{r}
+ggplot(baseball, aes(x = Hits, y = Salary)) +
+  geom_point(col = "pink") +
+  geom_smooth(method='lm',  # Add linear regression line 
+              se = FALSE) + # # Don't add shaded confidence region
+  labs(title = "Is there any relationship between baseball player Hits vs Salary",
+       subtitle = "Plotting your data with the best fitted line",
+       caption = "R course Venlo Course")
+
+```
+
+_You might get the error `geom_smooth()`using formula 'y ~ x'`. Ignore this error. Despite this error you get the correct graph in the plots window._
+
+The resulting blue line (see plot below) is called the regression line and it’s the line that best fits the data. In other words, the blue line is the best explanation of the relationship between the independent variable `(Hits)` and dependent variable `(Salary)`.
+
+### Exercise 2: Based on this plot, do you expect there to be a relationship between these variables? Which kind of test would you run in order to quantitatively support your answer?
+
+In addition to drawing the line, In statistics, once you have calculated the slope and y-intercept to form the best-fitting regression line in a scatterplot, you can then interpret their values:
+
+Y= \beta_0 +\beta_1 X + \varepsilon.
+Salary= Y= \beta_0 +\beta_1 Hits + \varepsilon.
+
+
+In this case, \beta_0 is the intercept, the value from where you start measuring (or in the figure the value where the regression line starts when X (in this case the Hits) = 0). \beta_1 is the slope of the best-fitting line. The slope measures the change of Salary with respect to the Hits as predicted by the line. Stated differently, the line illustrates the salary increase (\beta_1) for every one more hits a player did achieve it. To fully understand what we are talking about, we need to introduce you to what a ‘Simple Linear Regression’ is.
+
+At this point, I am kind of curious about the relationship: is there any possibility to suggest that we can predict the amount of money player earn and number of hits? 
+
+We are going to create a model that uses the number of `hits` a player does as an indicator of increasing in player salary `Salary`. I believe this model makes sense since we firstly show a linear relationship between both variables and I would assume that the better a player does, the higher increase in salary. Let's go ahead and try to create our first simple linear regression
+
+---
+
+## SIMPLE LINEAR REGRESSION
+
+![](https://miro.medium.com/max/888/1*guak1sQTh5sAf46NMzbQig.jpeg)
+
+**What is a linear regression?**
+
+A linear regression is a statistical model that analyzes the relationship between a dependent variable (Y) and one or more other variables (often explanatory variables or independent X). You make this kind of relationships in your head all the time, for example when you calculate the age of a child based on her height, you are assuming the older she is, the taller she will be. Or just the example taken above as a way to hypothesize an expected relationship between `Salary` and `Hits.`
+
+As mentioned before, we attempt to create a linear model to see this relationship. This model will predict `Salary`, using, in our case, the explanatory variable `hits`.
+
+
+Using the guide below, we are going to conduct a regression analysis predicting a player’s `Salary` as a function of his `Hits` value. We are going to save the result to an object called `baseball_simple`:
+
+```{r}
+baseball_simple <- lm(formula = Salary ~ Hits, # linear regression formula (Dependent ~ Independent)
+                data = baseball) # the name of my dataset
+```
+
+With the command `summary(baseball_simple)` you can see detailed information on the model’s performance and coefficients.
+
+```{r}
+summary(baseball_simple)
+```
+
+### Interpretation
+
+R will give you always the following information for model output:
+
+*Call:*
+
+This will show you what you actually just run. The linear equation of:
+
+`lm(formula = Salary ~ Hits, data = baseball)`
+
+*Residuals:*
+
+We can see the residuals of the `baseball_simple` as following:
+
+```{r include=FALSE}
+baseball_simple$residuals
+```
+
+Residuals are essentially the difference between the observed values (salary) and the response values that the model predicted. The Residuals section of the model output breaks it down into 5 summary points. Later on when making a residual plot, you are going to see that the distribution of the residuals do not appear to be strongly symmetrical. That means that the model gives you certain predictions that fall far away from the actual observed points. We could take this further consider plotting the residuals to see whether this normally distributed, etc. but will skip this for this example for the moment.
+
+
+*Coefficients*
+We can see the Coefficients of the `baseball_simple` as following:
+
+
+```{r}
+baseball_simple$coefficients
+```
+
+Thus, we have a our mathematical equation as `salary` variables as our dependent variable and our explanatory variable `Hits`.
+Salary=B0+B1*Hits
+Salary=262.886+3.195Hits
+
++ 1. Intercept: 
+
+
+
+This values will be always in the equation, unless you explictly erase it from the model
+
++ 2. Hits:
+
+One variable included into our linear model. In this particular case we just have added one.
+- Estimate values: this is giving us our estimated coefficients (betas) and this is the parameter that we need to interpret. So the first one here is given 262.886 that is our intercept value (B0). And what does it means? It is the average value for `Salary` when `Hits` is zero. So what is saying is when `Hits` is zero, we would expect an increase of the players salary of 262.886 dollar on average. However, do not care much about it because it usually does mean nothing in real life. The next coefficient 3.19 corresponds to (B1). This is really important and it tells us, in practical sense, our meaning about the equation. It is called *slope* and it shows us the numerical relationship between our two variables. And what does it mean in general?  Given a one unit increase in Hits (X independent variable) there will be an expected change in Salary(y), on average of 3.195 units. What does means in our case? For one `Hits` increase that baseball players does, we expect them to win 3.195 more dollars in their salary on average. You might notice that we can say that cause we have two continuous variable. So this is the most tricky part to get when interpreting your model results so take your time to fully understand it!
+
+
+
+Now it is your turn:
+
+### Exercise 3 – You are asked to answer the question: “Is there a relationship between the number of home runs a player scores and salary” using simple linear regression. 
+
+
+**1. Create a scatterplot showing the relationship (including a line) between HmRun and Salary using the code just learned. The output should look like this:** 
+
+```{r echo=FALSE}
+ggplot(baseball, aes(x = HmRun, y = Salary)) +
+  geom_point(col = "pink") +
+  geom_smooth(method='lm',  # Add linear regression line 
+              se = FALSE) + # # Don't add shaded confidence region
+  labs(title = "Is there any relationship between baseball player HmRun vs Salary",
+       subtitle = "Plotting your data with best fitted line",
+       caption = "R course Venlo Course")
+```
+
+**2.	Conduct a regression analysis predicting a player’s Salary as a function of its HmRun value. Save the result to an object called baseball_simple1 and ask R to give you the output (which should look like below). Interpret the output.**
+
+```{r echo=FALSE}
+baseball_simple1 <- lm(formula = Salary ~ HmRun, # linear regression formula (Dependent ~ Independent)
+                data = baseball) # the name of my dataset
+```
+
+
+**3. Use the `summary()` function to print additional summary information from your `baseball_simple1` object.**
+
+```{r echo=FALSE}
+summary(baseball_simple1)
+```
+
+4. Interpret the quality of the model based on your `baseball_simple1` model result please.
+
+5. Using the code below, plot the relationship between the model fitted values and the observed values.
+
+```{r}
+# Create scatterplot for observed vs fitted 
+ggplot(data = baseball, aes(x = Salary, y = baseball_simple1$fitted.values)) +  
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  labs(title = "Relationship between model fits (predicted) and observed Salaries",
+       subtitle = "Simple Regression = Salary ~ Hits",
+       caption = "R course for Applied Research", y = 'Predicted (Fitted) Salary', x = 'Observed Salary') +
+  geom_segment(aes(x = Salary, y = baseball_simple1$fitted.values, xend = Salary, yend = baseball_simple1$fitted.values), 
+               col = "red") +
+  xlim(c(-300, 3000)) +
+  ylim(c(-300, 3000))
+```
+
+
+A nice tutorial for a simple regression is [here](https://www.datacamp.com/community/tutorials/linear-regression-R)
+---
+
+## MULTIPLE REGRESSION
+
+![](https://miro.medium.com/max/800/0*_9IsvpJHqgzSSMqY.jpg)
+
+Multiple linear regression is an extension of simple linear regression. It is used to predict a dependent variable (y) on the basis of multiple explanatory/independent variables (x).
+
+When including four predictor variables (x), the prediction of y is expressed by the following equation:
+
+Y= \beta_0 +\beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4 + \varepsilon.
+
+
+
+The “\beta” values are called the regression weights (or \beta coefficients). They measure the association between the explanatory variables and the dependent variable.
+
+
+
+### Building the model
+
+We want to create a model for estimating the players salary based on the following variables from the baseball file:
+1.	`Hits` - Number of hits in year
+2.	`CWalks` - Number of walks during his career
+3.	`Assists` - Number of assists in year
+4.	`Errors` - Number of errors in year
+
+To do this, use the `formula = ‘y ~ x1 + x2 + x3 + Errors’` notation. Assign the result to an object called baseball_multiple. 
+
+
+```{r}
+baseball_multiple <- lm(formula = Salary ~ Hits + CWalks + Assists + Errors, # linear regression formula (Dependent ~ Independent)
+                data = baseball) # the name of my dataset
+```
+
+
+Again, create a summary() `baseball_multiple` in order to check its summary result:
+
+```{r echo=FALSE}
+summary(baseball_multiple)
+```
+
+---
+
+## LOGISTIC REGRESSION
+
+![](https://d2o2utebsixu4k.cloudfront.net/media/images/9a57ce9a-b10c-4ed0-9729-50d979af0a6f.jpg)
+
+### Case Study
+
+A Data Science Researcher in the University of Maastricht is interested in investigate how variables, such as statistics exam score, responsible exam score, prestige of the undergraduate institution and gender, effect admission rate into the new graduate program launched at the Institute of Data Science called Responsable Data Science. We are going to work with a response binary variable (y), admit/don’t admit
+
+#### Description of the data
+
+We have generated hypothetical data, which can be obtained from this [link](https://docs.google.com/spreadsheets/d/1QgksUXsOq2Lz7UyHAvdGTZozUDZd5mUuKM3WPn5q_Go/edit#gid=0)
+
+
+This dataset has a binary response (outcome, dependent) variable called `admit`. There are four explanatory variables: `stats`, `rank`, `responsible` `female`. We will treat the variables `stats` and `responsable` as continuous. The variable `rank` takes on the values 1 through 4. Institutions with a `rank` of 1 have have highest prestige, while those with a rank of 4 have the lowest. The `female` variable is 0 when male and 1 in case is female.
+
+*Import the data*:
+
+```{r}
+ResponsableDataScience <- read_excel("InstituteofDataScience.xlsx")
+```
+
+
+
+Check the `ResponsableDataScience`variables:
+
+```{r}
+str(ResponsableDataScience)
+```
+
+
+
+We can get basic descriptives for the entire data set by using `summary()`
+
+```{r}
+summary(ResponsableDataScience)
+```
+
+
+
+
+#### The essence of logit models
+
+
+Let's first have a look on the relationship between  and `stats` variable and whether or not the student was admitted in the graduate program:
+
+```{r}
+## Plotting the data
+library(ggplot2)
+ggplot(ResponsableDataScience, aes(stats, admit)) +
+  geom_point()
+
+```
+
+So each dots represent different students and how its grade in stats is connected with whether or not they were admitted into the Graduate Program. Value 1 are students that were admitted and value 0 not admitted.
+
+In order to fully understand the differences between linear and binomial regression, we can model this relationship using a linear regression model for example. Let’s try it and add it on the plot:
+
+
+```{r}
+
+ggplot(ResponsableDataScience, aes(stats, admit)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) + # linear regression and not plot the standard error
+  coord_cartesian(ylim = c(0,1)) # limit the plot
+```
+
+Super, quite an interesting plot! The linear model is not really a good fit right? Indeed, it is  violating some of the assumptions for linear model such as linearity (i.e. this plots shows non linear relationship between the variables) and  homoscedasticity (we could expect some that our residuals varies across values of our independent variable). You are always required to fully check these assumptions out before conducting any statistical analysis. HOWEVER, for the sake of simplicity, today we are not going to deal with such exercise. 
+
+Want to know how to deal with that? To get more information about it please this short [tutorial](http://r-statistics.co/Assumptions-of-Linear-Regression.html)
+
+Thus, ignoring the fact that assumptions have been violated, lets convert the blue line into a binomial graph/curve in the same plot but now, with the method glm(Generalized Linear model as a family models that are not linear, such logistic model):
+
+
+```{r}
+ggplot(ResponsableDataScience, aes(stats, admit)) +
+  geom_point() +
+  geom_smooth(method = 'glm', se = FALSE, method.args = list(family = 'binomial')) + #  and not plot the standard error
+  coord_cartesian(ylim = c(0,1)) # limit the plot
+```
+*Note*: if you get this ``geom_smooth()` using formula 'y ~ x'`, dont worry much, your plot should be correctly displayed in your R studio.
+
+As you might notice, this blue line appears to fit our data much better. Instead of linear regression(e.g. straight line) we just incorporated a binomial `curve`. So this is essentially what we do in this modelling; this model looks a little bit better when predicting admit rate based on stats scores. Indeed, the binomial model will predict those values closer to 0 as not addmitted, whereas it will predict students as admitted if the value is around 1.
+
+### Simple Logistic regression
+
+Let’s build a simple logistic regression formally, and we can see how likely a student is admitted in the graduate program with a one unit change in stats score. Let’s create a logitmodel to save our results as follow. The type of code is pretty similar to the linear regression one (though not identical ;)):
+
+
+```{r}
+# MODEL ADMIT BY STATS
+logitmodel <- glm(formula = admit ~ stats, # response variable ~ explanatory variable
+                  data = ResponsableDataScience,
+                  family = 'binomial')
+```
+
+Go ahead and look at the models output:
+
+```{r}
+# call the result object
+summary(logitmodel)
+```
+
+
+*Model Output Interpretation*
+
+* Call, this is R reminding us what the model we ran was, what options we specified.
+
+* Deviance residuals, which are a measure of model fit. This part of output shows the distribution of the deviance residuals for individual cases used in the model. 
+
+
+* Coefficients with their standard errors, the z-statistic (sometimes called a Wald z-statistic), and the associated p-values. Both `intercept` and `stats` are statistically significant. We can get the coefficient models from the model output as following:
+
+```{r}
+coef(logitmodel)
+```
+
+So the 8.70764 is the log odds of the variable `stats` and means that for a one unit increase in `stats`, the log odds of being admitted to graduate school increases by 0.804.
+
+To derive odds ratios from log odds you need to take the exponent of the coefficient (e.g. to do the opposite of log):
+
+```{r}
+exp(coef(logitmodel))
+```
+
+ informally speaking, this numbers here tell  is telling us that for one unit increase in `stats` grade, a students is 6049 more likely to be admitted in the graduate program. So that is the way we interpret odd ratios. Learn more about log odds and odds ratios [here](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-how-do-i-interpret-odds-ratios-in-logistic-regression/)
+
+### Exercise 6 – Now it is your turn: Using the previous explained steps, run a simple logistic regression model using responsible score as the independent variable and admit as the dependent variable. Interpret the results.
+
+---
+This work is licensed under the [CC BY-NC 4.0 Creative Commons License](http://creativecommons.org/licenses/by-nc/4.0/).
