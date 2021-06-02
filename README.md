@@ -31,7 +31,7 @@ The curriculum for these students will be:
 - Inferential Statistics
 
 
-## Lectures
+## Materials
 
 | Lecture | Day | Website | R Markdown | Description |
 |----|---|---|---|---|
