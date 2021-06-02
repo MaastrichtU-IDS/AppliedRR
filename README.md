@@ -33,31 +33,23 @@ The curriculum for these students will be:
 
 ## Lectures
 
-| Lecture | Day | Description |
-|----|---|---|
-|[Lecture 1](inputs/lectures/lecture1.pdf) | 13 April 2021 | Introduction to Stats with R |
-|[Lecture 2](inputs/lectures/lecture2.pdf) | 13 May 2021 | Descriptive Statistics |
-|[Lecture 3](inputs/lectures/lecture3.pdf) | 08 June 2021 | Inferential Statistics I |
-|[Lecture 4](inputs/lectures/lecture4.pdf) | 10 June 2021 | Inferential Statistics II |
-|[Lecture 5](inputs/lectures/lecture5.pdf) | 11 June 2021 | Inferential Statistics III |
+| Lecture | Day | Demo | Description |
+|----|---|---|---|
+|[Lecture 1](inputs/lectures/lecture1.pdf) | 13 April 2021 | - | Introduction to Stats with R |
+|[Lecture 2](inputs/lectures/lecture2.pdf) | 13 May 2021 | - | Descriptive Statistics |
+|[Lecture 3](inputs/lectures/lecture3.pdf) | 08 June 2021 | [Demo 3](inputs/demo/demo-lecture3.html) | Intro to R Markdown, independent t-test and correlations [.rmd](inputs/demo/demo-lecture3.rmd) |
+|[Lecture 4](inputs/lectures/lecture4.pdf) | 10 June 2021 | [Demo 4](inputs/demo/demo-lecture4.html) | Paired t-test and ANOVA</br>  [.rmd](inputs/demo/demo-lecture4.rmd) |
+|[Lecture 5](inputs/lectures/lecture5.pdf) | 11 June 2021 | [Demo 5](inputs/demo/demo-lecture5.html),</br> [Demo 6](inputs/demo/demo-lecture5b.html) | Linear, Multiple and Logistic Regression</br>[.rmd](inputs/demo/demo-lecture5.html) and [.rmd](inputs/demo/demo-lecture5b.rmd) |
 
 ## Assignments
 
-| Tutorial | Schedule | Learning Outcomes |
-|----|---|---|
-| [Intro to R](inputs/tutorials/Workshop1.docx) | 00:55| What are the essential components of R stats? |
-| [Exploratory Data Analysis](inputs/tutorials/Workshop2.docx) | 02:00 | What are the steps for Exploratory Data Analysis? |
-| [Inferential Statistics I](inputs/tutorials/Workshop3.docx) | 03:30 | How to conduct and interpret t-test in R? |
-| [Inferential Statistics II](inputs/tutorials/Workshop4.docx) | 05:00 | How to conduct and interpret ANOVA & Chi square test?  |
-| [Inferential Statistics III](inputs/tutorials/Workshop5.docx) | 06:30| How to conduct and interpret linear & logistic regression?  |
-
-## Demo
-+ [Intro to R Markdown, indepedent t-test and correlations](inputs/demo/demo-lecture3.html)
-+ [Paired t-test and ANOVA](inputs/demo/demo-lecture4.html)
-+ [Linear and multiple regression](inputs/demo/demo-lecture5.html)
-+ [Logistic regression](inputs/demo/demo-lecture5b.html)
-
-
+| Tutorial | Learning Outcomes |
+|----|---|
+| [Intro to R](inputs/tutorials/Workshop1.docx) | What are the essential components of R stats? |
+| [Exploratory Data Analysis](inputs/tutorials/Workshop2.docx) | What are the steps for Exploratory Data Analysis? |
+| [Inferential Statistics I](inputs/tutorials/Workshop3.docx) | How to conduct and interpret t-test in R? |
+| [Inferential Statistics II](inputs/tutorials/Workshop4.docx) | How to conduct and interpret paired T-test and ANOVA? |
+| [Inferential Statistics III](inputs/tutorials/Workshop5.docx) | How to conduct and interpret linear & logistic regression?  |
 
 ## Recommended literature:
 + Read Chapters 1-8 from [R for Data Science](https://r4ds.had.co.nz/)
