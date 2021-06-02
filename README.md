@@ -39,7 +39,7 @@ The curriculum for these students will be:
 |[Lecture 2](inputs/lectures/lecture2.pdf) | 13 May 2021 | - | - | Descriptive Statistics |
 |[Lecture 3](inputs/lectures/lecture3.pdf) | 08 June 2021 | [Demo 3](inputs/demo/demo-lecture3.html) | [.rmd](inputs/demo/demo-lecture3.Rmd)                        | Intro to R Markdown, independent t-test and correlations |
 |[Lecture 4](inputs/lectures/lecture4.pdf) | 10 June 2021 | [Demo 4](inputs/demo/demo-lecture4.html) | [.rmd](inputs/demo/demo-lecture4.Rmd) | Paired t-test and ANOVA |
-|[Lecture 5](inputs/lectures/lecture5.pdf) | 11 June 2021 | [Demo 5](inputs/demo/demo-lecture5.html),</br> [Demo 6](inputs/demo/demo-lecture5b.html) | [.rmd](inputs/demo/demo-lecture5.Rmd),[.rmd](inputs/demo/demo-lecture5b.Rmd) | Linear, Multiple and Logistic Regression |
+|[Lecture 5](inputs/lectures/lecture5.pdf) | 11 June 2021 | [Demo 5](inputs/demo/demo-lecture5.html),[Demo 6](inputs/demo/demo-lecture5b.html) | [.rmd](inputs/demo/demo-lecture5.Rmd),[.rmd](inputs/demo/demo-lecture5b.Rmd) | Linear, Multiple and Logistic Regression |
 
 
 
