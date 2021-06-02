@@ -54,7 +54,10 @@ The curriculum for these students will be:
 ## Demo
 + [Intro to R Markdown, indepedent t-test and correlations](inputs/demo/demo-lecture3.html)
 + [Paired t-test and ANOVA](inputs/demo/demo-lecture4.html)
-+ [Linear and logistic regression](inputs/demo/demo-lecture5.html)
++ [Linear and multiple regression](inputs/demo/demo-lecture5.html)
++ [Logistic regression](inputs/demo/demo-lecture5b.html)
+
+## Reference cards
 
 ## Reference cards
 
