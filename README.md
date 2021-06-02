@@ -57,7 +57,12 @@ The curriculum for these students will be:
 + [Linear and multiple regression](inputs/demo/demo-lecture5.html)
 + [Logistic regression](inputs/demo/demo-lecture5b.html)
 
-## Reference cards
+
+
+## Recommended literature:
++ Read Chapters 1-8 from [R for Data Science](https://r4ds.had.co.nz/)
+
+
 
 ## Reference cards
 
@@ -68,11 +73,7 @@ General R Basics:
 + [http://www.u.arizona.edu/~kuchi/Courses/MAT167/Files/R-refcard.pdf](http://www.u.arizona.edu/~kuchi/Courses/MAT167/Files/R-refcard.pdf)
 + [http://www.i3s.unice.fr/~malapert/R/pdf/base-r.pdf](http://www.i3s.unice.fr/~malapert/R/pdf/base-r.pdf)
 
-RStudio Guide:
-
-+ [http://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf](http://www.rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf)
-
-_Resources_: [https://rstudio.com/resources/cheatsheets/](https://rstudio.com/resources/cheatsheets/)
++ [https://rstudio.com/resources/cheatsheets/](https://rstudio.com/resources/cheatsheets/)
 
 
 ## License
