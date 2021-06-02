@@ -1,5 +1,5 @@
 ---
-title: 'Applied Research: Linear and logistic regression'
+title: 'Applied Research: Simple and Multiple Linear Regression'
 author:
 - name: Carlos Utrilla Guerrero
 date: "6/08/2021"
@@ -47,16 +47,17 @@ library(readxl) # import library
 baseball <- read_excel("Baseball.xlsx") # import the baseball.xlsx file
 ```
 
-_*Note that this command assumes that you have the `readxl` package already installed. If you haven’t done this in previous meetings but imported the file differently, then you first have to run the command `install.packages(“readxl”)`._
+_Note that this command assumes that you have the `readxl` package already installed. If you haven’t done this in previous meetings but imported the file differently, then you first have to run the command `install.packages(“readxl”)`._
 
 ---
+
 ## DATA PREPARATION
 
 First, you want to get to know the data set and see whether importing the dataset was successful and worked out correctly. To do this, first take a look at the first 6 rows of the dataset(s) by printing it/them to the console. 
 
 **Which command allows you to do this? The output should look like the table below:**
 
-```{r echo=FALSE}
+```{r echo=TRUE}
 head(baseball,6)
 ```
 
@@ -71,12 +72,12 @@ str(baseball)
 
 Now, you see that this data contains 50 observations and 20 variables. Also, we can clearly see that most of them are numerical and few of them are `characters` _(characters = text/string)_. Furthermore, none of the numerical variables are categorical ones, while all of the character variables are categorical. However, since the categorical variables are considered characters, they can’t be effectively used in further analysis. Therefore, we need to convert them into factors. 
 
-_*Note, due to the fact that we import the file from excel into R, R does not directly recognize categorical variables as factor and therefore we need to convert them ourselves._
+_Note, due to the fact that we import the file from excel into R, R does not directly recognize categorical variables as factor and therefore we need to convert them ourselves._
 
 ### Exercise 1: Can you please convert all three categorical variables into a factor? Remember from workshop 2 the code? 
 
 
-```{r}
+```{r echo=FALSE}
 # convert the variable "League" into factor
 baseball$League <- factor(baseball$League)
 # convert the variable "Division" into factor
@@ -115,13 +116,13 @@ At this point, we are very interested on exploring the Baseball dataset. We are 
 library(ggplot2) # import ggplot2 library for visualisation
 ggplot(baseball, aes(x = Hits, y = Salary)) +
   geom_point(col = "pink") +
-  labs(title = "Is there any relationship between baseball player Hits vs Salary",
+  labs(title = "Is there any relationship between baseball player Hits vs Salary?",
        subtitle = "Plotting your data is the first step to figuring out",
        caption = "R course Venlo Course")
 ```
 
 
-_*Note again, that library() only works if you have already installed the related package previously, in this case `install.packages(“ggplot2”)`._
+_Note again, that library() only works if you have already installed the related package previously, in this case `install.packages(“ggplot2”)`._
 
 The y-axis is the amount of salary **(the dependent variable is always on the y-axis)** and the x-axis is the total Hits. Each pink dot represents one player the baseball dataset. Glancing at this data, you probably notice that salary are higher for players that hit a lot. That’s interesting to know, but by how much is the salary higher?
 How can we answer with some degree of certainty how much a player typically earns when he hits a certain amount of balls? We can do this by drawing a line through the chart above, one that runs roughly through the middle of all the data points. We do this as follows:
@@ -132,7 +133,7 @@ ggplot(baseball, aes(x = Hits, y = Salary)) +
   geom_point(col = "pink") +
   geom_smooth(method='lm',  # Add linear regression line 
               se = FALSE) + # # Don't add shaded confidence region
-  labs(title = "Is there any relationship between baseball player Hits vs Salary",
+  labs(title = "Is there any relationship between baseball player Hits vs Salary?",
        subtitle = "Plotting your data with the best fitted line",
        caption = "R course Venlo Course")
 
@@ -146,11 +147,16 @@ The resulting blue line (see plot below) is called the regression line and it’
 
 In addition to drawing the line, In statistics, once you have calculated the slope and y-intercept to form the best-fitting regression line in a scatterplot, you can then interpret their values:
 
-Y= \beta_0 +\beta_1 X + \varepsilon.
-Salary= Y= \beta_0 +\beta_1 Hits + \varepsilon.
+
+$Y$= $\beta_{0}$ +$\beta_{1}$*$x_{1}$ + $\varepsilon$
 
 
-In this case, \beta_0 is the intercept, the value from where you start measuring (or in the figure the value where the regression line starts when X (in this case the Hits) = 0). \beta_1 is the slope of the best-fitting line. The slope measures the change of Salary with respect to the Hits as predicted by the line. Stated differently, the line illustrates the salary increase (\beta_1) for every one more hits a player did achieve it. To fully understand what we are talking about, we need to introduce you to what a ‘Simple Linear Regression’ is.
+$Salary$ = $\beta_{0}$ +$\beta_{1}$*$x_{Hits}$ + $\varepsilon$
+
+
+In this case, $\beta_{0}$ is the intercept, the value from where you start measuring (or in the figure the value where the regression line starts when X (in this case the `Hits` = 0). $\beta_{1}$ is the slope of the best-fitting line. The slope measures the change of `Salary` with respect to the `Hits` as predicted by the line. 
+
+Stated differently, the line illustrates the salary increase ($\beta_{1}$) for every one more hits a player did achieve it. 
 
 At this point, I am kind of curious about the relationship: is there any possibility to suggest that we can predict the amount of money player earn and number of hits? 
 
@@ -164,7 +170,7 @@ We are going to create a model that uses the number of `hits` a player does as a
 
 **What is a linear regression?**
 
-A linear regression is a statistical model that analyzes the relationship between a dependent variable (Y) and one or more other variables (often explanatory variables or independent X). You make this kind of relationships in your head all the time, for example when you calculate the age of a child based on her height, you are assuming the older she is, the taller she will be. Or just the example taken above as a way to hypothesize an expected relationship between `Salary` and `Hits.`
+A linear regression is a statistical model that analyzes the relationship between a dependent variable (Y) and one or more other variables (often explanatory variables or independent $x_{1} + x_{2} + \cdots + x_{n}$). You make this kind of relationships in your head all the time, for example when you calculate the age of a child based on her height, you are assuming the older she is, the taller she will be. Or just the example taken above as a way to hypothesize an expected relationship between `Salary` and `Hits.`
 
 As mentioned before, we attempt to create a linear model to see this relationship. This model will predict `Salary`, using, in our case, the explanatory variable `hits`.
 
@@ -212,23 +218,26 @@ baseball_simple$coefficients
 ```
 
 Thus, we have a our mathematical equation as `salary` variables as our dependent variable and our explanatory variable `Hits`.
+
 Salary=B0+B1*Hits
-Salary=262.886+3.195Hits
 
-+ 1. Intercept: 
+$Salary$ = $\beta_{0}$ +$\beta_{1}$*$x_{Hits}$ + $\varepsilon$
 
+
+$Salary$ = $262.886$ +$3.19$*$x_{Hits}$
+
+
+**Intercept:** 
 
 
 This values will be always in the equation, unless you explictly erase it from the model
 
-+ 2. Hits:
+**Hits:**
 
 One variable included into our linear model. In this particular case we just have added one.
 - Estimate values: this is giving us our estimated coefficients (betas) and this is the parameter that we need to interpret. So the first one here is given 262.886 that is our intercept value (B0). And what does it means? It is the average value for `Salary` when `Hits` is zero. So what is saying is when `Hits` is zero, we would expect an increase of the players salary of 262.886 dollar on average. However, do not care much about it because it usually does mean nothing in real life. The next coefficient 3.19 corresponds to (B1). This is really important and it tells us, in practical sense, our meaning about the equation. It is called *slope* and it shows us the numerical relationship between our two variables. And what does it mean in general?  Given a one unit increase in Hits (X independent variable) there will be an expected change in Salary(y), on average of 3.195 units. What does means in our case? For one `Hits` increase that baseball players does, we expect them to win 3.195 more dollars in their salary on average. You might notice that we can say that cause we have two continuous variable. So this is the most tricky part to get when interpreting your model results so take your time to fully understand it!
 
 
-
-Now it is your turn:
 
 ### Exercise 3 – You are asked to answer the question: “Is there a relationship between the number of home runs a player scores and salary” using simple linear regression. 
 
@@ -259,9 +268,9 @@ baseball_simple1 <- lm(formula = Salary ~ HmRun, # linear regression formula (De
 summary(baseball_simple1)
 ```
 
-4. Interpret the quality of the model based on your `baseball_simple1` model result please.
+**4. Interpret the quality of the model based on your `baseball_simple1` model result please.**
 
-5. Using the code below, plot the relationship between the model fitted values and the observed values.
+**5. Using the code below, plot the relationship between the model fitted values and the observed values.**
 
 ```{r}
 # Create scatterplot for observed vs fitted 
@@ -279,6 +288,8 @@ ggplot(data = baseball, aes(x = Salary, y = baseball_simple1$fitted.values)) +
 
 
 A nice tutorial for a simple regression is [here](https://www.datacamp.com/community/tutorials/linear-regression-R)
+
+
 ---
 
 ## MULTIPLE REGRESSION
@@ -289,11 +300,13 @@ Multiple linear regression is an extension of simple linear regression. It is us
 
 When including four predictor variables (x), the prediction of y is expressed by the following equation:
 
-Y= \beta_0 +\beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4 + \varepsilon.
+$Salary$= $\beta_{0}$ +$\beta_{1}$*$x_{1}$ +$\beta_{2}$*$x_{2}$ +$\beta_{3}$*$x_{3}$ +$\beta_{4}$*$x_{4}$ + $\varepsilon$
 
 
 
-The “\beta” values are called the regression weights (or \beta coefficients). They measure the association between the explanatory variables and the dependent variable.
+
+
+The “$\beta$” values are called the regression weights (or $\beta$ coefficients). They measure the association between the explanatory variables and the dependent variable.
 
 
 

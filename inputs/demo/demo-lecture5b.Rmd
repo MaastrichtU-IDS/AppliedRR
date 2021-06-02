@@ -105,6 +105,7 @@ ggplot(ResponsableDataScience, aes(stats, admit)) +
 ```
 
 
+
 *Note*: if you get this ``geom_smooth()` using formula 'y ~ x'`, dont worry much, your plot should be correctly displayed in your R studio.
 
 As you might notice, this blue line appears to fit our data much better. Instead of linear regression(e.g. straight line) we just incorporated a binomial `curve`. So this is essentially what we do in this modelling; this model looks a little bit better when predicting admit rate based on stats scores. Indeed, the binomial model will predict those values closer to 0 as not addmitted, whereas it will predict students as admitted if the value is around 1.
