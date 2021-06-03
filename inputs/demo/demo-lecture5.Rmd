@@ -47,8 +47,6 @@ library(readxl) # import library
 baseball <- read_excel("Baseball.xlsx") # import the baseball.xlsx file
 ```
 
-_Note that this command assumes that you have the `readxl` package already installed. If you haven’t done this in previous meetings but imported the file differently, then you first have to run the command `install.packages(“readxl”)`._
-
 ---
 
 ## DATA PREPARATION
@@ -58,7 +56,7 @@ First, you want to get to know the data set and see whether importing the datase
 **Which command allows you to do this? The output should look like the table below:**
 
 ```{r echo=TRUE}
-head(baseball,6)
+# add your command here
 ```
 
 Next, you take a look at the *structure* of the data in order to see the number of observations the dataset `baseball` has, as well as the number and type of variables.
@@ -66,7 +64,7 @@ Next, you take a look at the *structure* of the data in order to see the number 
 **Which code can you use? The output should look like...or give you exactly this information!**
 
 ```{r echo=FALSE}
-str(baseball)
+# add your command here
 ```
 
 
@@ -83,7 +81,7 @@ baseball$League <- factor(baseball$League)
 # convert the variable "Division" into factor
 baseball$Division <- factor(baseball$Division)
 # convert the variable "NewLeague" into factor
-baseball$NewLeague <- factor(baseball$Division)
+## add here your command
 ```
 
 Does the code class tell you that all the 3 categorical variables have been changed into a factor? If yes, then perfect! Another way to check it is having a look again the structure of our baseball dataset. The difference to `class()` is that the next command also immediately tells you how many levels the individual factor variables have.
@@ -94,7 +92,6 @@ str(baseball)
 
 
 Next thing to do is to check for **missing values**. You already know that you can use the command `is.na()` in R in order to see if there are missing values. If you run it, you will see that there are any NA values in our dataset; that is perfect! Nonetheless, a good point of `summary()` is that also will give you a count of NA values.
-
 
 ---
 
@@ -112,6 +109,8 @@ summary(baseball)
 
 At this point, we are very interested on exploring the Baseball dataset. We are wondering if **there is a relationship between the number of `Hits` a player had and his `Salary.`** Lets create a scatterplot for this. Try this command in your R console
 
+![](https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iGqDK5mFnypk/v0/1000x-1.jpg)
+
 ```{r}
 library(ggplot2) # import ggplot2 library for visualisation
 ggplot(baseball, aes(x = Hits, y = Salary)) +
@@ -124,8 +123,14 @@ ggplot(baseball, aes(x = Hits, y = Salary)) +
 
 _Note again, that library() only works if you have already installed the related package previously, in this case `install.packages(“ggplot2”)`._
 
-The y-axis is the amount of salary **(the dependent variable is always on the y-axis)** and the x-axis is the total Hits. Each pink dot represents one player the baseball dataset. Glancing at this data, you probably notice that salary are higher for players that hit a lot. That’s interesting to know, but by how much is the salary higher?
-How can we answer with some degree of certainty how much a player typically earns when he hits a certain amount of balls? We can do this by drawing a line through the chart above, one that runs roughly through the middle of all the data points. We do this as follows:
+**Interpretation**
+
+The y-axis is the amount of salary **(the dependent variable is always on the y-axis)** and the x-axis is the total Hits. Each pink dot represents one player the baseball dataset. Glancing at this data, you probably notice that salary are higher for players that hit a lot. That’s interesting to know, but: 
+
+**by how much is the salary higher? How can we answer with some degree of certainty how much a player typically earns when he hits a certain amount of balls?** 
+
+
+We can do this by drawing a line through the chart above, one that runs roughly through the middle of all the data points. We do this as follows:
 
 
 ```{r}
@@ -228,18 +233,15 @@ $Salary$ = $262.886$ +$3.19$*$x_{Hits}$
 
 
 **Intercept:** 
-
-
 This values will be always in the equation, unless you explictly erase it from the model
 
 **Hits:**
-
 One variable included into our linear model. In this particular case we just have added one.
 - Estimate values: this is giving us our estimated coefficients (betas) and this is the parameter that we need to interpret. So the first one here is given 262.886 that is our intercept value (B0). And what does it means? It is the average value for `Salary` when `Hits` is zero. So what is saying is when `Hits` is zero, we would expect an increase of the players salary of 262.886 dollar on average. However, do not care much about it because it usually does mean nothing in real life. The next coefficient 3.19 corresponds to (B1). This is really important and it tells us, in practical sense, our meaning about the equation. It is called *slope* and it shows us the numerical relationship between our two variables. And what does it mean in general?  Given a one unit increase in Hits (X independent variable) there will be an expected change in Salary(y), on average of 3.195 units. What does means in our case? For one `Hits` increase that baseball players does, we expect them to win 3.195 more dollars in their salary on average. You might notice that we can say that cause we have two continuous variable. So this is the most tricky part to get when interpreting your model results so take your time to fully understand it!
 
 
 
-### Exercise 3 – You are asked to answer the question: “Is there a relationship between the number of home runs a player scores and salary” using simple linear regression. 
+### Exercise 3: You are asked to answer the question: “Is there a relationship between the number of home runs a player scores and salary” using simple linear regression. 
 
 
 **1. Create a scatterplot showing the relationship (including a line) between HmRun and Salary using the code just learned. The output should look like this:** 
@@ -257,14 +259,13 @@ ggplot(baseball, aes(x = HmRun, y = Salary)) +
 **2.	Conduct a regression analysis predicting a player’s Salary as a function of its HmRun value. Save the result to an object called baseball_simple1 and ask R to give you the output (which should look like below). Interpret the output.**
 
 ```{r echo=FALSE}
-baseball_simple1 <- lm(formula = Salary ~ HmRun, # linear regression formula (Dependent ~ Independent)
-                data = baseball) # the name of my dataset
+# add your command here
 ```
 
 
 **3. Use the `summary()` function to print additional summary information from your `baseball_simple1` object.**
 
-```{r echo=FALSE}
+```{r eval=FALSE, include=FALSE}
 summary(baseball_simple1)
 ```
 
@@ -272,7 +273,7 @@ summary(baseball_simple1)
 
 **5. Using the code below, plot the relationship between the model fitted values and the observed values.**
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 # Create scatterplot for observed vs fitted 
 ggplot(data = baseball, aes(x = Salary, y = baseball_simple1$fitted.values)) +  
   geom_point() +
@@ -302,34 +303,29 @@ When including four predictor variables (x), the prediction of y is expressed by
 
 $Salary$= $\beta_{0}$ +$\beta_{1}$*$x_{1}$ +$\beta_{2}$*$x_{2}$ +$\beta_{3}$*$x_{3}$ +$\beta_{4}$*$x_{4}$ + $\varepsilon$
 
-
-
-
-
 The “$\beta$” values are called the regression weights (or $\beta$ coefficients). They measure the association between the explanatory variables and the dependent variable.
 
 
+### Exercise 4: Conduct a regression analysis predicting a player’s Salary as a function of the following **independent variables**. Save the result to an object called baseball_multiple and ask R to give you the output (which should look like below).
 
-### Building the model
+**Independent variables from the baseball file:**
 
-We want to create a model for estimating the players salary based on the following variables from the baseball file:
 1.	`Hits` - Number of hits in year
 2.	`CWalks` - Number of walks during his career
 3.	`Assists` - Number of assists in year
 4.	`Errors` - Number of errors in year
 
-To do this, use the `formula = ‘y ~ x1 + x2 + x3 + Errors’` notation. Assign the result to an object called baseball_multiple. 
+To do this, use the `formula = ‘y ~ x1 + x2 + x3 + X4’` notation. Assign the result to an object called baseball_multiple. 
 
 
 ```{r}
-baseball_multiple <- lm(formula = Salary ~ Hits + CWalks + Assists + Errors, # linear regression formula (Dependent ~ Independent)
-                data = baseball) # the name of my dataset
+# add your command here
 ```
 
 
 Again, create a summary() `baseball_multiple` in order to check its summary result:
 
-```{r echo=FALSE}
+```{r eval=FALSE, include=FALSE}
 summary(baseball_multiple)
 ```
 
