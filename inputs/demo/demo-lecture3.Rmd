@@ -26,11 +26,9 @@ By the end of this demo, you should be able to:
 
 * Open and create a R Markdown.
 
-* Formulate different hypothesis testing
+* Interpret comparing means model outputs for independent t-test.
 
-* Interpret hypothesis testing for comparing means model outputs
-
-* Interpret pearson correlation and scatter plots
+* Calculate and interpret pearson correlation and scatter plots.
 
 
 ## Quick started with hyptohesis testing using [R Markdown](https://rmarkdown.rstudio.com/)
@@ -38,14 +36,20 @@ By the end of this demo, you should be able to:
 ![Artwork by @allison_horst](https://cfss.uchicago.edu/media/allison_horst_art/rmarkdown_rockstar_hu2e508a81a7bfad3089552f8e7186e525_4660528_1200x1200_fit_lanczos_2.png)
 
 
-R Markdown documents are fully reproducible. Use a productive notebook interface to weave together narrative text and code to produce elegantly formatted output.
+R Markdown provides an unified authoring framework for data science, combining your code, its results, and your prose commentary. R Markdown documents are fully reproducible and support dozens of output formats, like PDFs, Word files, slideshows, and more.
 
 
-If you want to get more familiar with the hand procedure of hypothesis testing, you have a look in the following tutorials:
+### Recommended sources:
 
-- [Inferential statistics](http://www.r-tutor.com/elementary-statistics/hypothesis-testing)
++ [R for Data Science](https://r4ds.had.co.nz/r-markdown.html): Read Chapter 27 to get more information about R Markdown.
 
-- [Hypothesis Testing by Hand: A Single Sample tTest]([https://www.youtube.com/watch?v=yvHQEJnYZBY])
++ If you want to get more familiar with the **hand procedure** of hypothesis testing, you have a look in the following tutorials:
+
+  - [Inferential statistics](http://www.r-tutor.com/elementary-statistics/hypothesis-testing)
+
+  - [Hypothesis Testing by Hand: A Single Sample tTest](https://www.youtube.com/watch?v=yvHQEJnYZBY)
+
++ [Statistics, probability, significance, likelihood: words mean what we define them to mean](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3230804/pdf/bph0164-1573.pdf)
 
 
 ## Using the Student's T-test
@@ -53,7 +57,6 @@ If you want to get more familiar with the hand procedure of hypothesis testing, 
 R can handle the various versions of T-test using the `t.test()` command. This function can be used to deal with one-sample tests as well as two-sample (un-)paired tests.
 
 ### DEMO 1: (Unparied) Independent samples t-test
-
 
 **Research question:**Is there any (statistical) difference in the mean orange juice poured in a glass of 33cl between Maastricht and Amsterdam coffee lovers?
 
@@ -70,7 +73,18 @@ Complete the steps to perform a t-test comparing means. In a markdown, add R scr
 
 **Step 1: Formulate the hypothesis**
 
+
+- The _null hypothesis_:
+
+$H0:$ ....
+
+- The _alternative hypothesis_:
+
+$Ha:$ ....
+
 **Step 2: State level significance**
+
+The level of significance of a test, alpha-level of a test or $\alpha$ level of a test, is probability of making a false-positive error, assuming the null hypothesis is correct. The alpha-level of a test is typically decided on, in advance of an experiment, and sets the actual critical value for accepting the alternative hypothesis that is used, regardless of the sample.
 
 **Step 3: Collect data from different cities**
 
@@ -87,6 +101,17 @@ print(orange_maastricht)
 
 ```
 **Step 4: Conduct t-test for comparing means**
+
+
+
+```{r}
+# read official documentation for t-test method
+?t.test()
+```
+
+
+These numbers below are the results of t.test:
+
 ```{r echo=FALSE}
 # Conduct independent t-test
 t.test(x = orange_maastricht,   # sample values Maastricht
@@ -97,6 +122,7 @@ t.test(x = orange_maastricht,   # sample values Maastricht
 
 **Step 5: Conclusion & Model Output Interpretation**
 
+---
 
 
 ### DEMO 2: Gapminder dataset
@@ -106,40 +132,46 @@ t.test(x = orange_maastricht,   # sample values Maastricht
 ![](https://pics.me.me/thumb_is-your-p-value-greater-than-alpha-because-id-fail-4042435.png)
 ---
 
-```{r}
-# Create a plot with Data Gapminder
-library(gapminder)
-library(dplyr)
-data("gapminder")
-mydat <- filter(gapminder, country == 'South Africa' | country == 'Ireland')
 
+**Import Gapminder dataset:**
+
+```{r}
+library(gapminder)
+data("gapminder")
+```
+
+**Filter for specific country:**
+```{r}
+library(dplyr) # that won't work in the students since they have to insert dplyr library!!
+mydat <- filter(gapminder, country == 'South Africa' | country == 'Ireland')
+```
+
+**Get average for each country:**
+
+```{r}
 summarize(filter(mydat, country == 'South Africa'),
           Avg_Life_SouthAfrica = mean(lifeExp, na.rm = TRUE))
-
 ```
+
+
 ```{r}
 summarize(filter(mydat, country == 'Ireland'),
           Avg_Life_Ireland = mean(lifeExp, na.rm = TRUE))
 ```
 
+**Conduct t-test for comparing means**
+
 ```{r}
 t.test(data = mydat, lifeExp ~ country)
 ```
 
+---
 
 ## Scatter plot and pearson correlation
 
 ![Artwork by @allison_horst](https://cfss.uchicago.edu/media/allison_horst_art/presenting_monster_hu19027c6bf39be6f35de5f2a07de7eee0_1253011_1200x1200_fit_lanczos_2.png)
 
 In statistics, you deal with a lot of data. The hard part is finding patterns that fit the data. To look for patterns, there are several statistical tools that help identify these patterns. But before you use any of these tools, you should look for basic patterns. As you learned, you can identify basic patterns using a scatter plot and correlation.
-
-Import Gapminder dataset:
-```{r}
-library(gapminder)
-data("gapminder")
-
-```
-
 
 
 Let's create a simple scatter plot:
@@ -156,14 +188,19 @@ abline(lm(gdpPercap~lifeExp,gapminder), col ="blue")
 
 ```
 
-According to this figure, we might conclude that there is a weak association between GDP and LifeExp variables. Also, we cannot clearly define the direction of this association. Relying on the interpretation of a scatterplot is too subjective. Indeed,more precise evidence is needed, and this evidence is obtained by computing a coefficient that measures the strength of the relationship under investigation.
+
+**What about create a scatterplot with `ggplot` library?**
 
 
 ```{r}
 library(ggplot2)
 ggplot(gapminder,aes(x = lifeExp, y = gdpPercap)) + 
-  geom_point() + facet_wrap(~continent) + geom_smooth(method = 'lm')
+  geom_point() + 
+  facet_wrap(~continent) + 
+  geom_smooth(method = 'lm')
 ```
+
+Another one:
 
 ```{r}
 ggplot(
@@ -183,12 +220,19 @@ ggplot(
 
 Because both are both continuous variables, will use Pearson’s product-moment correlation to quantify the strength of the relationship between these two variables. There are a few ways to do this in R, but we will only consider one method here.
 
-```{r}
 
+**Can you please use `cor()` function to calculate the correlation between both variables**
+
+```{r}
 # correlation between both variables
-cor(gapminder$lifeExp,gapminder$gdpPercap)
+
+```
+
+**Can you please test the correlation between these two variables? Use `cor.test`:**
+
+```{r}
 # Calculating Pearson's product-moment correlation
- cor.test(gapminder$lifeExp,gapminder$gdpPercap, method = "pearson", conf.level = 0.95)
+
 ```
 
 ---
