@@ -33,16 +33,21 @@ By the end of this assignment(s), you should be able to:
 
 ![](https://miro.medium.com/max/643/1*c3I4Px2ezjbWu3SiInRCKA.jpeg)
 
-As you already know, t-Tests are a great way of identifying if two group means are statistically different. This can be done by comparing a sample to the population (one-sample) or comparing two different samples (two-sample).T-tests are further broken down into two categories: unpaired t-tests and paired t-tests. This tutorial will focus on the latter.
+As you already know, t-Tests are a great way of identifying if two group means are statistically different. This can be done by comparing a sample to the population (one-sample) or comparing two different samples (two-sample).
+
+T-tests are further broken down into two categories: unpaired t-tests and **paired t-tests**. This demo will focus on the latter.
 
 
 ### Import Dataset:
 
+To illustrate the paired t-test, we will use the [Student's Sleep Data](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/sleep.html).
 
-To illustrate the paired t-test, we will use the Student's Sleep Data.
+![](https://media.npr.org/assets/img/2013/10/17/sleepingbrain_wide-e40290d47221863e13990f78f86b983781d5673e.jpeg)
 
 *Description*
 Data which show the effect of two soporific drugs (increase in hours of sleep compared to control) on 10 patients.
+
+
 
 *Format*
 A data frame with 20 observations on 3 variables.
@@ -72,7 +77,7 @@ boxplot(sleep$extra ~ sleep$group,
 
 ### DEMO 1:
 
-**Q1. How would you create the same boxplot using ggplot library? How would you fix this error?**
+**Q1. How would you create the same box plot using ggplot library? How would you fix this error?**
 
 
 ```{r eval=FALSE, include=FALSE}
@@ -103,20 +108,18 @@ t.test(x = sleep$extra[sleep$group == 1],
 ## Analysis of the Variance (ANOVA)
 
 
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nicCTmNutpFgW7ONzNbM4VMeXZZb1dfq54LZNHmwT60Kv04gNWj18nWuCK_O4jR4SOg&usqp=CAU)
+
 ### What is one-way ANOVA test?
 
 The one-way analysis of variance (ANOVA), also known as one-factor ANOVA, is a statistical technique, commonly used to study differences between two or more group means. In one-way ANOVA, the data is organized into several groups base on one single grouping variable (also called factor variable). This section describes the basic principle of the one-way ANOVA test and provides practical anova test examples in R software.
 
 ### ANOVA test hypotheses:
-![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8nicCTmNutpFgW7ONzNbM4VMeXZZb1dfq54LZNHmwT60Kv04gNWj18nWuCK_O4jR4SOg&usqp=CAU)
-
 
 * $Ho$ --> Null hypothesis: the means of the different groups are the same.
 
 * $Ha$ --> Alternative hypothesis: At least one sample mean is not equal to the others.
 
-
-*Note that, if you have only two groups, you can use t-test. In this case the F-test and the t-test are equivalent*.
 
 #### General steps to conduct an ANOVA
 
@@ -124,7 +127,8 @@ Here are the 2 steps you should follow to conduct a standard ANOVA in R:
 
 1. Create an ANOVA object using the `aov()` function. In the `aov()` function, specify the independent and dependent variable(s) with a formula with the format `y ~ x1`  where `y` is the dependent variable, and x1, are one (more more) factor independent variables.
 
-```{r eval=FALSE, include=FALSE}
+
+```r
 # Step 1: Create an object (you can call it mod.aov)
 mod.aov <- aov(formula = y ~ x1,
                data = data)
@@ -133,7 +137,7 @@ mod.aov <- aov(formula = y ~ x1,
 
 2. Create a summary ANOVA table by applying the `summary()` function to the ANOVA object you created in Step 1.
 
-```{r, eval=F, echo=T}
+```r
 # Step 2: Look at a summary of the aov object
 summary(mod.aov)
 ```
@@ -146,7 +150,6 @@ Here, we’ll use the built-in R data set named PlantGrowth. It contains the wei
 plants <- PlantGrowth # import dataset with R built function
 # show the levels == categpries
 levels(plants$group)
-
 ```
 
 ### Check your data
@@ -173,6 +176,7 @@ summarise(group_by(my_data, group),
           count = n(),
           mean = mean(weight, na.rm = TRUE),
               sd = sd(weight, na.rm = TRUE))
+
 ```
 
 
