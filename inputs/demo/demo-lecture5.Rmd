@@ -22,13 +22,12 @@ knitr::opts_chunk$set(echo = TRUE)
 In workshop #5 you’ll practice constructing and understanding regression models.
 
 
-* Create simple and multiple linear regression models with `lm()`
+* Create simple and multiple linear regression models with `lm()`.
 
 * Explore the outputs of your models, including coefficients, confidence intervals, and p-values.
 
-* Explore the residuals and fitted values of a linear model.
 
-* Use your model to make predictions for new data,
+* Use your model to make predictions for new data.
 
 ---
 
@@ -84,14 +83,12 @@ baseball$Division <- factor(baseball$Division)
 ## add here your command
 ```
 
-Does the code class tell you that all the 3 categorical variables have been changed into a factor? If yes, then perfect! Another way to check it is having a look again the structure of our baseball dataset. The difference to `class()` is that the next command also immediately tells you how many levels the individual factor variables have.
+Does the code class tell you that all the 3 categorical variables have been changed into a factor? If yes, then perfect! Another way to check it is having a look again the structure of our baseball dataset.
 
 ```{r}
 str(baseball)
 ```
 
-
-Next thing to do is to check for **missing values**. You already know that you can use the command `is.na()` in R in order to see if there are missing values. If you run it, you will see that there are any NA values in our dataset; that is perfect! Nonetheless, a good point of `summary()` is that also will give you a count of NA values.
 
 ---
 
@@ -107,7 +104,7 @@ Great. It seems like we are ready to run some basic summary statistics of our da
 summary(baseball)
 ```
 
-At this point, we are very interested on exploring the Baseball dataset. We are wondering if **there is a relationship between the number of `Hits` a player had and his `Salary.`** Lets create a scatterplot for this. Try this command in your R console
+At this point, we are very interested on exploring the Baseball dataset. We are wondering if **there is a relationship between the number of `Hits` a player had and his `Salary.`** Lets create a scatterplot for this.
 
 ![](https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iGqDK5mFnypk/v0/1000x-1.jpg)
 
@@ -127,7 +124,7 @@ _Note again, that library() only works if you have already installed the related
 
 The y-axis is the amount of salary **(the dependent variable is always on the y-axis)** and the x-axis is the total Hits. Each pink dot represents one player the baseball dataset. Glancing at this data, you probably notice that salary are higher for players that hit a lot. That’s interesting to know, but: 
 
-**by how much is the salary higher? How can we answer with some degree of certainty how much a player typically earns when he hits a certain amount of balls?** 
+#### by how much is the salary higher? How can we answer with some degree of certainty how much a player typically earns when he hits a certain amount of balls?  
 
 
 We can do this by drawing a line through the chart above, one that runs roughly through the middle of all the data points. We do this as follows:
@@ -144,13 +141,15 @@ ggplot(baseball, aes(x = Hits, y = Salary)) +
 
 ```
 
-_You might get the error `geom_smooth()`using formula 'y ~ x'`. Ignore this error. Despite this error you get the correct graph in the plots window._
 
 The resulting blue line (see plot below) is called the regression line and it’s the line that best fits the data. In other words, the blue line is the best explanation of the relationship between the independent variable `(Hits)` and dependent variable `(Salary)`.
 
 ### Exercise 2: Based on this plot, do you expect there to be a relationship between these variables? Which kind of test would you run in order to quantitatively support your answer?
 
-In addition to drawing the line, In statistics, once you have calculated the slope and y-intercept to form the best-fitting regression line in a scatterplot, you can then interpret their values:
+
+---
+
+In addition to drawing the line, in statistics, once you have calculated the slope and y-intercept to form the best-fitting regression line in a scatterplot, you can then interpret their values:
 
 
 $Y$= $\beta_{0}$ +$\beta_{1}$*$x_{1}$ + $\varepsilon$
@@ -193,28 +192,10 @@ With the command `summary(baseball_simple)` you can see detailed information on 
 summary(baseball_simple)
 ```
 
-### Interpretation
-
-R will give you always the following information for model output:
-
-*Call:*
-
-This will show you what you actually just run. The linear equation of:
-
-`lm(formula = Salary ~ Hits, data = baseball)`
-
-*Residuals:*
-
-We can see the residuals of the `baseball_simple` as following:
-
-```{r include=FALSE}
-baseball_simple$residuals
-```
-
-Residuals are essentially the difference between the observed values (salary) and the response values that the model predicted. The Residuals section of the model output breaks it down into 5 summary points. Later on when making a residual plot, you are going to see that the distribution of the residuals do not appear to be strongly symmetrical. That means that the model gives you certain predictions that fall far away from the actual observed points. We could take this further consider plotting the residuals to see whether this normally distributed, etc. but will skip this for this example for the moment.
-
+### Interpretation focus on the coefficients
 
 *Coefficients*
+
 We can see the Coefficients of the `baseball_simple` as following:
 
 
@@ -237,8 +218,6 @@ This values will be always in the equation, unless you explictly erase it from t
 
 **Hits:**
 One variable included into our linear model. In this particular case we just have added one.
-- Estimate values: this is giving us our estimated coefficients (betas) and this is the parameter that we need to interpret. So the first one here is given 262.886 that is our intercept value (B0). And what does it means? It is the average value for `Salary` when `Hits` is zero. So what is saying is when `Hits` is zero, we would expect an increase of the players salary of 262.886 dollar on average. However, do not care much about it because it usually does mean nothing in real life. The next coefficient 3.19 corresponds to (B1). This is really important and it tells us, in practical sense, our meaning about the equation. It is called *slope* and it shows us the numerical relationship between our two variables. And what does it mean in general?  Given a one unit increase in Hits (X independent variable) there will be an expected change in Salary(y), on average of 3.195 units. What does means in our case? For one `Hits` increase that baseball players does, we expect them to win 3.195 more dollars in their salary on average. You might notice that we can say that cause we have two continuous variable. So this is the most tricky part to get when interpreting your model results so take your time to fully understand it!
-
 
 
 ### Exercise 3: You are asked to answer the question: “Is there a relationship between the number of home runs a player scores and salary” using simple linear regression. 
@@ -256,7 +235,7 @@ ggplot(baseball, aes(x = HmRun, y = Salary)) +
        caption = "R course Venlo Course")
 ```
 
-**2.	Conduct a regression analysis predicting a player’s Salary as a function of its HmRun value. Save the result to an object called baseball_simple1 and ask R to give you the output (which should look like below). Interpret the output.**
+**2.	Conduct a regression analysis predicting a player’s `Salary` as a function of its `HmRun` value. Save the result to an object called baseball_simple1 and ask R to give you the output (which should look like below). Interpret the output.**
 
 ```{r echo=FALSE}
 # add your command here
@@ -306,7 +285,8 @@ $Salary$= $\beta_{0}$ +$\beta_{1}$*$x_{1}$ +$\beta_{2}$*$x_{2}$ +$\beta_{3}$*$x_
 The “$\beta$” values are called the regression weights (or $\beta$ coefficients). They measure the association between the explanatory variables and the dependent variable.
 
 
-### Exercise 4: Conduct a regression analysis predicting a player’s Salary as a function of the following **independent variables**. Save the result to an object called baseball_multiple and ask R to give you the output (which should look like below).
+### Exercise 4: Conduct a regression analysis predicting a player’s Salary as a function of the following **independent variables**. 
+
 
 **Independent variables from the baseball file:**
 
@@ -323,7 +303,7 @@ To do this, use the `formula = ‘y ~ x1 + x2 + x3 + X4’` notation. Assign the
 ```
 
 
-Again, create a summary() `baseball_multiple` in order to check its summary result:
+Again, create a summary() `baseball_multiple` in order to check its summary result!
 
 ```{r eval=FALSE, include=FALSE}
 summary(baseball_multiple)
