@@ -145,7 +145,7 @@ data("gapminder")
 
 **Filter for specific country:**
 ```{r}
-library(dplyr) # that won't work in the students since they have to insert dplyr library!!
+library(dplyr) # import the necessary packages
 mydat <- filter(gapminder, country == 'South Africa' | country == 'Ireland')
 ```
 
